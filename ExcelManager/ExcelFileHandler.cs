@@ -1,6 +1,7 @@
 ﻿using System;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
+using OfficeFileHandler;
 
 namespace OfficeFileHandler
 {
@@ -34,24 +35,27 @@ namespace OfficeFileHandler
             mWorkbook.Save();
         }
 
-        public void Dispose()
+        public void Close()
         {
             if (mRange != null)
-            {
                 Marshal.ReleaseComObject(mRange);
-            }
             if (mWorksheet != null)
-            {
                 Marshal.ReleaseComObject(mWorksheet);
-            }
             if (mWorkbook != null)
             {
+                mWorkbook.Close(true); // 저장하고 닫기
                 Marshal.ReleaseComObject(mWorkbook);
             }
             if (mExcelApp != null)
             {
+                mExcelApp.Quit();
                 Marshal.ReleaseComObject(mExcelApp);
             }
+        }
+
+        public void Dispose()
+        {
+            Close();
         }
     }
 }

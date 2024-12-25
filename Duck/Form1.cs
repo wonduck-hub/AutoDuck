@@ -32,13 +32,17 @@ namespace Duck
         {
             if (mExcelHandler != null)
             {
-                mExcelHandler.Save();
-                mExcelHandler.Dispose();
+                mExcelHandler.Close();
             }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (mExcelHandler != null)
+            {
+                mExcelHandler.Close();
+            }
+
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "Excel Files|*.xlsx|All Files|*.*";
