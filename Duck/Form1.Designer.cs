@@ -28,32 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
-            generateBtn = new Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem = new ToolStripMenuItem();
+            excelWindowToolStripMenuItem = new ToolStripMenuItem();
+            excelWindowCheckBox = new CheckBox();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // generateBtn
+            // menuStrip1
             // 
-            generateBtn.Location = new Point(562, 94);
-            generateBtn.Name = "generateBtn";
-            generateBtn.Size = new Size(210, 86);
-            generateBtn.TabIndex = 0;
-            generateBtn.Text = "Generate xlsx file";
-            generateBtn.UseVisualStyleBackColor = true;
-            generateBtn.Click += generateBtn_Click;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.TabIndex = 1;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(103, 22);
+            openToolStripMenuItem.Text = "Open";
+            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { excelWindowToolStripMenuItem });
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(44, 20);
+            viewToolStripMenuItem.Text = "View";
+            // 
+            // excelWindowToolStripMenuItem
+            // 
+            excelWindowToolStripMenuItem.Name = "excelWindowToolStripMenuItem";
+            excelWindowToolStripMenuItem.Size = new Size(147, 22);
+            excelWindowToolStripMenuItem.Text = "Excel Window";
+            // 
+            // excelWindowCheckBox
+            // 
+            excelWindowCheckBox.AutoSize = true;
+            excelWindowCheckBox.Location = new Point(689, 47);
+            excelWindowCheckBox.Name = "excelWindowCheckBox";
+            excelWindowCheckBox.Size = new Size(99, 19);
+            excelWindowCheckBox.TabIndex = 2;
+            excelWindowCheckBox.Text = "Excel Window";
+            excelWindowCheckBox.UseVisualStyleBackColor = true;
+            excelWindowCheckBox.CheckedChanged += excelWindowCheckBox_CheckedChanged;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(generateBtn);
+            Controls.Add(excelWindowCheckBox);
+            Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
-            Text = "Form1";
+            Text = "Duck";
+            FormClosed += form1_Close;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private Button generateBtn;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem excelWindowToolStripMenuItem;
+        private CheckBox excelWindowCheckBox;
     }
 }
