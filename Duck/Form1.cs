@@ -30,10 +30,11 @@ namespace Duck
 
         private void form1_Close(object sender, FormClosedEventArgs e)
         {
-            Debug.Assert(mExcelHandler != null);
-
-            mExcelHandler.Save();
-            mExcelHandler.Dispose();
+            if (mExcelHandler != null)
+            {
+                mExcelHandler.Save();
+                mExcelHandler.Dispose();
+            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
