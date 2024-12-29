@@ -57,7 +57,7 @@
             // openFileToolStripMenuItem
             // 
             openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            openFileToolStripMenuItem.Size = new Size(180, 22);
+            openFileToolStripMenuItem.Size = new Size(103, 22);
             openFileToolStripMenuItem.Text = "Open";
             openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
@@ -74,6 +74,7 @@
             // 
             // worksheetsComboBox
             // 
+            worksheetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             worksheetsComboBox.FormattingEnabled = true;
             worksheetsComboBox.Location = new Point(12, 47);
             worksheetsComboBox.Name = "worksheetsComboBox";
