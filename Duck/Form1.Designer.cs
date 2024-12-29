@@ -31,8 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem = new ToolStripMenuItem();
-            excelWindowCheckBox = new CheckBox();
+            openFileToolStripMenuItem = new ToolStripMenuItem();
+            showExcelWindowCheckBox = new CheckBox();
+            worksheetsComboBox = new ComboBox();
+            runButton = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -47,35 +49,55 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openFileToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
-            // openToolStripMenuItem
+            // openFileToolStripMenuItem
             // 
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(180, 22);
-            openToolStripMenuItem.Text = "Open";
-            openToolStripMenuItem.Click += openToolStripMenuItem_Click;
+            openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            openFileToolStripMenuItem.Size = new Size(180, 22);
+            openFileToolStripMenuItem.Text = "Open";
+            openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
-            // excelWindowCheckBox
+            // showExcelWindowCheckBox
             // 
-            excelWindowCheckBox.AutoSize = true;
-            excelWindowCheckBox.Location = new Point(689, 47);
-            excelWindowCheckBox.Name = "excelWindowCheckBox";
-            excelWindowCheckBox.Size = new Size(99, 19);
-            excelWindowCheckBox.TabIndex = 2;
-            excelWindowCheckBox.Text = "Excel Window";
-            excelWindowCheckBox.UseVisualStyleBackColor = true;
-            excelWindowCheckBox.CheckedChanged += excelWindowCheckBox_CheckedChanged;
+            showExcelWindowCheckBox.AutoSize = true;
+            showExcelWindowCheckBox.Location = new Point(689, 47);
+            showExcelWindowCheckBox.Name = "showExcelWindowCheckBox";
+            showExcelWindowCheckBox.Size = new Size(99, 19);
+            showExcelWindowCheckBox.TabIndex = 2;
+            showExcelWindowCheckBox.Text = "Excel Window";
+            showExcelWindowCheckBox.UseVisualStyleBackColor = true;
+            showExcelWindowCheckBox.CheckedChanged += showExcelWindowCheckBox_CheckedChanged;
+            // 
+            // worksheetsComboBox
+            // 
+            worksheetsComboBox.FormattingEnabled = true;
+            worksheetsComboBox.Location = new Point(12, 47);
+            worksheetsComboBox.Name = "worksheetsComboBox";
+            worksheetsComboBox.Size = new Size(121, 23);
+            worksheetsComboBox.TabIndex = 3;
+            // 
+            // runButton
+            // 
+            runButton.Location = new Point(563, 129);
+            runButton.Name = "runButton";
+            runButton.Size = new Size(225, 127);
+            runButton.TabIndex = 4;
+            runButton.Text = "Run";
+            runButton.UseVisualStyleBackColor = true;
+            runButton.Click += runButton_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(excelWindowCheckBox);
+            Controls.Add(runButton);
+            Controls.Add(worksheetsComboBox);
+            Controls.Add(showExcelWindowCheckBox);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
@@ -91,7 +113,9 @@
         #endregion
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem openToolStripMenuItem;
-        private CheckBox excelWindowCheckBox;
+        private ToolStripMenuItem openFileToolStripMenuItem;
+        private CheckBox showExcelWindowCheckBox;
+        private ComboBox worksheetsComboBox;
+        private Button runButton;
     }
 }

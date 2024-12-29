@@ -2,6 +2,7 @@
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using OfficeFileHandler;
+using System.Diagnostics;
 
 namespace OfficeFileHandler
 {
@@ -9,8 +10,6 @@ namespace OfficeFileHandler
     {
         private Excel.Application mExcelApp;
         private Excel.Workbook mWorkbook;
-        private Excel.Worksheet mWorksheet;
-        private Excel.Range mRange;
 
         public ExcelFileHandler(string filePath)
         {
@@ -20,9 +19,12 @@ namespace OfficeFileHandler
 
         public void SetCellValue(int sheetIndex, int row, int column, string value)
         {
-            mWorksheet = (Excel.Worksheet)mWorkbook.Sheets[sheetIndex];
-            mRange = (Excel.Range)mWorksheet.Cells[row, column];
+            Excel.Worksheet mWorksheet = (Excel.Worksheet)mWorkbook.Sheets[sheetIndex];
+            Excel.Range mRange = (Excel.Range)mWorksheet.Cells[row, column];
             mRange.Value = value;
+
+            Marshal.ReleaseComObject(mRange);
+            Marshal.ReleaseComObject(mWorksheet);
         }
 
         public void SetVisible(bool check)
@@ -30,6 +32,12 @@ namespace OfficeFileHandler
             mExcelApp.Visible = check;
         }
 
+        public Excel.Sheets GetSheets()
+        {
+            return mWorkbook.Sheets;
+        }
+
+        #region Save, Close and Dispose
         public void Save()
         {
             mWorkbook.Save();
@@ -37,19 +45,30 @@ namespace OfficeFileHandler
 
         public void Close()
         {
-            if (mRange != null)
-                Marshal.ReleaseComObject(mRange);
-            if (mWorksheet != null)
-                Marshal.ReleaseComObject(mWorksheet);
-            if (mWorkbook != null)
+            try
             {
-                mWorkbook.Close(true); // 저장하고 닫기
-                Marshal.ReleaseComObject(mWorkbook);
+                if (mWorkbook != null)
+                {
+                    mWorkbook.Close(true); // 저장하고 닫기
+                    Marshal.ReleaseComObject(mWorkbook);
+                }
+            } 
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
             }
-            if (mExcelApp != null)
+
+            try
             {
-                mExcelApp.Quit();
-                Marshal.ReleaseComObject(mExcelApp);
+                if (mExcelApp != null)
+                {
+                    mExcelApp.Quit();
+                    Marshal.ReleaseComObject(mExcelApp);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
 
@@ -57,5 +76,6 @@ namespace OfficeFileHandler
         {
             Close();
         }
+        #endregion
     }
 }

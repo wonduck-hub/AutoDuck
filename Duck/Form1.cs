@@ -20,23 +20,39 @@ namespace Duck
         public Form1()
         {
             InitializeComponent();
+
+            disableAllControl();
         }
 
-
-        private void form1Load(object sender, EventArgs e)
+        #region Load Close
+        private void form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void form1_Close(object sender, FormClosedEventArgs e)
         {
             if (mExcelHandler != null)
             {
-                mExcelHandler.Close();
+                mExcelHandler.Dispose();
             }
         }
+        #endregion
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void disableAllControl()
+        {
+            showExcelWindowCheckBox.Enabled = false;
+            worksheetsComboBox.Enabled = false;
+            runButton.Enabled = false;
+        }
+
+        private void enableAllControl()
+        {
+            showExcelWindowCheckBox.Enabled = true;
+            worksheetsComboBox.Enabled = true;
+            runButton.Enabled = true;
+        }
+
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (mExcelHandler != null)
             {
@@ -53,13 +69,28 @@ namespace Duck
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = saveFileDialog.FileName;
+                    try
+                    {
+                        mExcelHandler = new ExcelFileHandler(filePath);
 
-                    mExcelHandler = new ExcelFileHandler(filePath);
+                        enableAllControl();
+                        Excel.Sheets ws = mExcelHandler.GetSheets();
+
+                        foreach (Excel.Worksheet sheet in ws)
+                        {
+                            worksheetsComboBox.Items.Add(sheet.Name);
+                        }
+                        worksheetsComboBox.SelectedIndex = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
                 }
             }
         }
 
-        private void excelWindowCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void showExcelWindowCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Debug.Assert(mExcelHandler != null);
 
@@ -73,6 +104,11 @@ namespace Duck
             {
                 mExcelHandler.SetVisible(false);
             }
+        }
+
+        private void runButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
