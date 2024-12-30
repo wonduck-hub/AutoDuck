@@ -102,8 +102,11 @@
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
+            MaximumSize = new Size(816, 489);
+            MinimumSize = new Size(816, 489);
             Name = "Form1";
-            Text = "Duck";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "AutoDuck";
             FormClosed += form1_Close;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();

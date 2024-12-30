@@ -15,7 +15,7 @@ namespace Duck
 {
     public partial class Form1 : Form
     {
-        OfficeFileHandler.ExcelFileHandler mExcelHandler;
+        OfficeFileHandler.ExcelFileHandler mExcelHandler = null;
 
         public Form1()
         {
@@ -94,9 +94,9 @@ namespace Duck
         {
             Debug.Assert(mExcelHandler != null);
 
-            System.Windows.Forms.CheckBox chb = sender as System.Windows.Forms.CheckBox;
+            System.Windows.Forms.CheckBox checkBox = sender as System.Windows.Forms.CheckBox;
 
-            if (chb.Checked)
+            if (checkBox.Checked)
             {
                 mExcelHandler.SetVisible(true);
             }
@@ -108,7 +108,24 @@ namespace Duck
 
         private void runButton_Click(object sender, EventArgs e)
         {
+            disableAllControl();
+            this.Cursor = Cursors.WaitCursor;
 
+            bool isSucess = mExcelHandler.MsCetsaRun(worksheetsComboBox.SelectedIndex + 1);
+
+            this.Cursor = Cursors.Default;
+            enableAllControl();
+
+            if (isSucess)
+            {
+                MessageBox.Show("sucess!", "Sucess",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                MessageBox.Show("can't found valid table", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
