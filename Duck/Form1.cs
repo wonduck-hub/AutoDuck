@@ -38,11 +38,15 @@ namespace Duck
         }
         #endregion
 
+        #region disable enable
         private void disableAllControl()
         {
             showExcelWindowCheckBox.Enabled = false;
             worksheetsComboBox.Enabled = false;
             runButton.Enabled = false;
+            chemicalSubstance1TextBox.Enabled = false;
+            chemicalSubstance2TextBox.Enabled = false;
+            saveFileToolStripMenuItem.Enabled = false;
         }
 
         private void enableAllControl()
@@ -50,6 +54,25 @@ namespace Duck
             showExcelWindowCheckBox.Enabled = true;
             worksheetsComboBox.Enabled = true;
             runButton.Enabled = true;
+            chemicalSubstance1TextBox.Enabled = true;
+            chemicalSubstance2TextBox.Enabled = true;
+            saveFileToolStripMenuItem.Enabled = true;
+        }
+        #endregion
+
+        private void initControl()
+        {
+            Excel.Sheets ws = mExcelHandler.GetSheets();
+
+            worksheetsComboBox.Items.Clear();
+            foreach (Excel.Worksheet sheet in ws)
+            {
+                worksheetsComboBox.Items.Add(sheet.Name);
+            }
+            worksheetsComboBox.SelectedIndex = 0;
+
+            chemicalSubstance1TextBox.Text = string.Empty;
+            chemicalSubstance2TextBox.Text = string.Empty;
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -74,13 +97,7 @@ namespace Duck
                         mExcelHandler = new ExcelFileHandler(filePath);
 
                         enableAllControl();
-                        Excel.Sheets ws = mExcelHandler.GetSheets();
-
-                        foreach (Excel.Worksheet sheet in ws)
-                        {
-                            worksheetsComboBox.Items.Add(sheet.Name);
-                        }
-                        worksheetsComboBox.SelectedIndex = 0;
+                        initControl();
                     }
                     catch (Exception ex)
                     {
@@ -115,6 +132,7 @@ namespace Duck
 
             this.Cursor = Cursors.Default;
             enableAllControl();
+            initControl();
 
             if (isSucess)
             {
@@ -123,9 +141,14 @@ namespace Duck
             }
             else
             {
-                MessageBox.Show("can't found valid table", "Error", 
+                MessageBox.Show("can't found valid table", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mExcelHandler.Save();
         }
     }
 }

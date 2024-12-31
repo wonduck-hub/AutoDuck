@@ -32,9 +32,14 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             openFileToolStripMenuItem = new ToolStripMenuItem();
+            saveFileToolStripMenuItem = new ToolStripMenuItem();
             showExcelWindowCheckBox = new CheckBox();
             worksheetsComboBox = new ComboBox();
             runButton = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            chemicalSubstance1TextBox = new TextBox();
+            chemicalSubstance2TextBox = new TextBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -49,7 +54,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openFileToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openFileToolStripMenuItem, saveFileToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -57,9 +62,16 @@
             // openFileToolStripMenuItem
             // 
             openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            openFileToolStripMenuItem.Size = new Size(103, 22);
-            openFileToolStripMenuItem.Text = "Open";
+            openFileToolStripMenuItem.Size = new Size(180, 22);
+            openFileToolStripMenuItem.Text = "File";
             openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
+            // 
+            // saveFileToolStripMenuItem
+            // 
+            saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
+            saveFileToolStripMenuItem.Size = new Size(180, 22);
+            saveFileToolStripMenuItem.Text = "Save";
+            saveFileToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // showExcelWindowCheckBox
             // 
@@ -91,11 +103,47 @@
             runButton.UseVisualStyleBackColor = true;
             runButton.Click += runButton_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 104);
+            label1.Name = "label1";
+            label1.Size = new Size(128, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Chemical substance 1: ";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 129);
+            label2.Name = "label2";
+            label2.Size = new Size(128, 15);
+            label2.TabIndex = 6;
+            label2.Text = "Chemical substance 2: ";
+            // 
+            // chemicalSubstance1TextBox
+            // 
+            chemicalSubstance1TextBox.Location = new Point(146, 101);
+            chemicalSubstance1TextBox.Name = "chemicalSubstance1TextBox";
+            chemicalSubstance1TextBox.Size = new Size(100, 23);
+            chemicalSubstance1TextBox.TabIndex = 7;
+            // 
+            // chemicalSubstance2TextBox
+            // 
+            chemicalSubstance2TextBox.Location = new Point(146, 126);
+            chemicalSubstance2TextBox.Name = "chemicalSubstance2TextBox";
+            chemicalSubstance2TextBox.Size = new Size(100, 23);
+            chemicalSubstance2TextBox.TabIndex = 8;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chemicalSubstance2TextBox);
+            Controls.Add(chemicalSubstance1TextBox);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(runButton);
             Controls.Add(worksheetsComboBox);
             Controls.Add(showExcelWindowCheckBox);
@@ -121,5 +169,10 @@
         private CheckBox showExcelWindowCheckBox;
         private ComboBox worksheetsComboBox;
         private Button runButton;
+        private Label label1;
+        private Label label2;
+        private TextBox chemicalSubstance1TextBox;
+        private TextBox chemicalSubstance2TextBox;
+        private ToolStripMenuItem saveFileToolStripMenuItem;
     }
 }
