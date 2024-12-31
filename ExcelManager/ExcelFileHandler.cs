@@ -28,6 +28,13 @@ namespace OfficeFileHandler
             int comparison1ColumnIndex, int chemicalSubstanceResult1ColumnIndex,
             int comparison2ColumnIndex, int chemicalSubstanceResult2ColumnIndex)
         {
+            Debug.Assert(tableStartRow > 0);
+            Debug.Assert(tableStartColumn > 0);
+            Debug.Assert(comparison1ColumnIndex > 0);
+            Debug.Assert(chemicalSubstanceResult1ColumnIndex > 0);
+            Debug.Assert(comparison2ColumnIndex > 0);
+            Debug.Assert(chemicalSubstanceResult2ColumnIndex > 0);
+
             Excel.Worksheet resultSheet = mWorkbook.Sheets.Add();
             resultSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
             // 열 제목
