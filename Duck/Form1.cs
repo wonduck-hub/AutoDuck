@@ -137,7 +137,7 @@ namespace Duck
             if (isSucess)
             {
                 MessageBox.Show("sucess!", "Sucess",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
