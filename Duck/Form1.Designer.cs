@@ -36,7 +36,11 @@
             showExcelWindowCheckBox = new CheckBox();
             worksheetsComboBox = new ComboBox();
             runButton = new Button();
+            label1 = new Label();
+            percentageNumericUpDown = new NumericUpDown();
+            label2 = new Label();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)percentageNumericUpDown).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -72,7 +76,7 @@
             // showExcelWindowCheckBox
             // 
             showExcelWindowCheckBox.AutoSize = true;
-            showExcelWindowCheckBox.Location = new Point(689, 47);
+            showExcelWindowCheckBox.Location = new Point(689, 50);
             showExcelWindowCheckBox.Name = "showExcelWindowCheckBox";
             showExcelWindowCheckBox.Size = new Size(99, 19);
             showExcelWindowCheckBox.TabIndex = 2;
@@ -84,26 +88,58 @@
             // 
             worksheetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             worksheetsComboBox.FormattingEnabled = true;
-            worksheetsComboBox.Location = new Point(12, 47);
+            worksheetsComboBox.Location = new Point(119, 48);
             worksheetsComboBox.Name = "worksheetsComboBox";
             worksheetsComboBox.Size = new Size(121, 23);
             worksheetsComboBox.TabIndex = 3;
             // 
             // runButton
             // 
-            runButton.Location = new Point(563, 129);
+            runButton.Location = new Point(12, 391);
             runButton.Name = "runButton";
-            runButton.Size = new Size(225, 127);
+            runButton.Size = new Size(776, 47);
             runButton.TabIndex = 4;
             runButton.Text = "Run";
             runButton.UseVisualStyleBackColor = true;
             runButton.Click += runButton_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 51);
+            label1.Name = "label1";
+            label1.Size = new Size(84, 15);
+            label1.TabIndex = 5;
+            label1.Text = "selected sheet:";
+            // 
+            // percentageNumericUpDown
+            // 
+            percentageNumericUpDown.DecimalPlaces = 2;
+            percentageNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            percentageNumericUpDown.Location = new Point(119, 77);
+            percentageNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
+            percentageNumericUpDown.Name = "percentageNumericUpDown";
+            percentageNumericUpDown.Size = new Size(120, 23);
+            percentageNumericUpDown.TabIndex = 6;
+            percentageNumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 65536 });
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 79);
+            label2.Name = "label2";
+            label2.Size = new Size(69, 15);
+            label2.TabIndex = 7;
+            label2.Text = "percentage:";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label2);
+            Controls.Add(percentageNumericUpDown);
+            Controls.Add(label1);
             Controls.Add(runButton);
             Controls.Add(worksheetsComboBox);
             Controls.Add(showExcelWindowCheckBox);
@@ -118,6 +154,7 @@
             FormClosed += form1_Close;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)percentageNumericUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -130,5 +167,8 @@
         private ComboBox worksheetsComboBox;
         private Button runButton;
         private ToolStripMenuItem saveFileToolStripMenuItem;
+        private Label label1;
+        private NumericUpDown percentageNumericUpDown;
+        private Label label2;
     }
 }

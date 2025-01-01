@@ -45,6 +45,7 @@ namespace Duck
             worksheetsComboBox.Enabled = false;
             runButton.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
+            percentageNumericUpDown.Enabled = false;
         }
 
         private void enableAllControl()
@@ -53,6 +54,7 @@ namespace Duck
             worksheetsComboBox.Enabled = true;
             runButton.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
+            percentageNumericUpDown.Enabled = true;
         }
         #endregion
 
@@ -66,6 +68,7 @@ namespace Duck
                 worksheetsComboBox.Items.Add(sheet.Name);
             }
             worksheetsComboBox.SelectedIndex = 0;
+            percentageNumericUpDown.Value = 0.0m;
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -121,7 +124,7 @@ namespace Duck
             disableAllControl();
             this.Cursor = Cursors.WaitCursor;
 
-            bool isSucess = mExcelHandler.MsCetsaRun(worksheetsComboBox.SelectedIndex + 1);
+            bool isSucess = mExcelHandler.MsCetsaRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
 
             this.Cursor = Cursors.Default;
             enableAllControl();

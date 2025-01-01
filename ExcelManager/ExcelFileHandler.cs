@@ -61,7 +61,7 @@ namespace OfficeFileHandler
             }
         }
 
-        public bool MsCetsaRun(int sheetIndex)
+        public bool MsCetsaRun(int sheetIndex, decimal extractionPercentage)
         {
             Debug.Assert(sheetIndex > 0);
 
@@ -132,7 +132,7 @@ namespace OfficeFileHandler
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value = 
                 ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, 0.9)");
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
             // diff 열 삭제
@@ -149,7 +149,7 @@ namespace OfficeFileHandler
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, 0.9)");
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
             // diff 열 삭제
@@ -163,13 +163,13 @@ namespace OfficeFileHandler
             criteriaRange = newSheet.Range["B1:B2"];
             newSheet.Range["B4"].Value = startHeadName;
             newSheet.Range["C4"].Value = tableHead[0];
-            newSheet.Range["D4"].Value = tableHead[1];
+            newSheet.Range["D4"].Value = tableHead[2];
             newSheet.Range["E4"].Value = "diff";
             destinationRange = newSheet.Range["B4:E4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, 0.9)");
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
             // diff 열 삭제
@@ -180,13 +180,13 @@ namespace OfficeFileHandler
             criteriaRange = newSheet.Range["H1:H2"];
             newSheet.Range["H4"].Value = startHeadName;
             newSheet.Range["I4"].Value = tableHead[3];
-            newSheet.Range["J4"].Value = tableHead[4];
+            newSheet.Range["J4"].Value = tableHead[5];
             newSheet.Range["K4"].Value = "diff";
             destinationRange = newSheet.Range["H4:K4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, 0.9)");
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
             // diff 열 삭제
