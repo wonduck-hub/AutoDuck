@@ -44,8 +44,6 @@ namespace Duck
             showExcelWindowCheckBox.Enabled = false;
             worksheetsComboBox.Enabled = false;
             runButton.Enabled = false;
-            chemicalSubstance1TextBox.Enabled = false;
-            chemicalSubstance2TextBox.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
         }
 
@@ -54,8 +52,6 @@ namespace Duck
             showExcelWindowCheckBox.Enabled = true;
             worksheetsComboBox.Enabled = true;
             runButton.Enabled = true;
-            chemicalSubstance1TextBox.Enabled = true;
-            chemicalSubstance2TextBox.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
         }
         #endregion
@@ -70,9 +66,6 @@ namespace Duck
                 worksheetsComboBox.Items.Add(sheet.Name);
             }
             worksheetsComboBox.SelectedIndex = 0;
-
-            chemicalSubstance1TextBox.Text = string.Empty;
-            chemicalSubstance2TextBox.Text = string.Empty;
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
