@@ -127,7 +127,8 @@ namespace OfficeFileHandler
             newSheet.Range["B4"].Value = startHeadName;
             newSheet.Range["C4"].Value = tableHead[0];
             newSheet.Range["D4"].Value = tableHead[1];
-            Excel.Range destinationRange = newSheet.Range["B4:D4"];
+            newSheet.Range["E4"].Value = "diff";
+            Excel.Range destinationRange = newSheet.Range["B4:E4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value = 
                 ">=" + experimentWorksheet.Evaluate(
@@ -143,7 +144,8 @@ namespace OfficeFileHandler
             newSheet.Range["H4"].Value = startHeadName;
             newSheet.Range["I4"].Value = tableHead[3];
             newSheet.Range["J4"].Value = tableHead[4];
-            destinationRange = newSheet.Range["H4:J4"];
+            newSheet.Range["K4"].Value = "diff";
+            destinationRange = newSheet.Range["H4:K4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
@@ -162,7 +164,8 @@ namespace OfficeFileHandler
             newSheet.Range["B4"].Value = startHeadName;
             newSheet.Range["C4"].Value = tableHead[0];
             newSheet.Range["D4"].Value = tableHead[1];
-            destinationRange = newSheet.Range["B4:D4"];
+            newSheet.Range["E4"].Value = "diff";
+            destinationRange = newSheet.Range["B4:E4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
@@ -178,7 +181,8 @@ namespace OfficeFileHandler
             newSheet.Range["H4"].Value = startHeadName;
             newSheet.Range["I4"].Value = tableHead[3];
             newSheet.Range["J4"].Value = tableHead[4];
-            destinationRange = newSheet.Range["H4:J4"];
+            newSheet.Range["K4"].Value = "diff";
+            destinationRange = newSheet.Range["H4:K4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
                 ">=" + experimentWorksheet.Evaluate(
