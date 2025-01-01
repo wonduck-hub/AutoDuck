@@ -68,7 +68,7 @@ namespace Duck
                 worksheetsComboBox.Items.Add(sheet.Name);
             }
             worksheetsComboBox.SelectedIndex = 0;
-            percentageNumericUpDown.Value = 0.0m;
+            percentageNumericUpDown.Value = 0.1m;
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)

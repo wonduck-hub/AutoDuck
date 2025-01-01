@@ -121,6 +121,7 @@ namespace OfficeFileHandler
             // 새 워크 시트에 필터링한 값 출력
             Excel.Worksheet newSheet = mWorkbook.Sheets.Add();
             newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
+            newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
             // diff 열 추가
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 3, 2);
             Excel.Range criteriaRange = newSheet.Range["B1:B2"];
@@ -158,6 +159,7 @@ namespace OfficeFileHandler
             // 새 워크 시트에 필터링한 값 출력
             newSheet = mWorkbook.Sheets.Add();
             newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
+            newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
             // diff 열 추가
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 4, 2);
             criteriaRange = newSheet.Range["B1:B2"];
