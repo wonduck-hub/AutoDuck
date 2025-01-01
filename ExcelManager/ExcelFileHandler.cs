@@ -122,7 +122,7 @@ namespace OfficeFileHandler
             Excel.Worksheet newSheet = mWorkbook.Sheets.Add();
             newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
             newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
-            // diff 열 추가
+            // diff 열 계산
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 3, 2);
             Excel.Range criteriaRange = newSheet.Range["B1:B2"];
             newSheet.Range["B4"].Value = startHeadName;
@@ -136,10 +136,8 @@ namespace OfficeFileHandler
                     $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
-            // diff 열 삭제
-            removeDiffColumnInTable(tableRange, startTableCell, endTableCell);
 
-            // diff 열 추가
+            // diff 열 계산
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 6, 5);
             criteriaRange = newSheet.Range["H1:H2"];
             newSheet.Range["H4"].Value = startHeadName;
@@ -153,14 +151,12 @@ namespace OfficeFileHandler
                     $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
-            // diff 열 삭제
-            removeDiffColumnInTable(tableRange, startTableCell, endTableCell);
 
             // 새 워크 시트에 필터링한 값 출력
             newSheet = mWorkbook.Sheets.Add();
             newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
             newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
-            // diff 열 추가
+            // diff 열 계산
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 4, 2);
             criteriaRange = newSheet.Range["B1:B2"];
             newSheet.Range["B4"].Value = startHeadName;
@@ -174,10 +170,8 @@ namespace OfficeFileHandler
                     $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
-            // diff 열 삭제
-            removeDiffColumnInTable(tableRange, startTableCell, endTableCell);
 
-            // diff 열 추가
+            // diff 열 계산
             addDiffColumnInTable(tableRange, startTableCell, endTableCell, 7, 5);
             criteriaRange = newSheet.Range["H1:H2"];
             newSheet.Range["H4"].Value = startHeadName;
@@ -191,6 +185,7 @@ namespace OfficeFileHandler
                     $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
             tableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
+            
             // diff 열 삭제
             removeDiffColumnInTable(tableRange, startTableCell, endTableCell);
 
