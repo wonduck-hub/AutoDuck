@@ -12,6 +12,9 @@ namespace Duck.OfficeAutomationModule.Office
         private Application mExcelApp;
         private Workbook mWorkbook;
 
+        private static readonly string[] MS_TABLE_HEAD = { "126", "127", "128", "129", "130", "131" };
+        private const string MS_TABLE_NAME = "name";
+
         public ExcelFileHandler(string filePath)
         {
             mExcelApp = new Application();
@@ -23,7 +26,144 @@ namespace Duck.OfficeAutomationModule.Office
             return mWorkbook.Sheets;
         }
 
-        private void addDiffColumnInTable(
+        public void SetVisible(bool check)
+        {
+            mExcelApp.Visible = check;
+        }
+
+        #region MsCetsa
+        public bool MsCetsaRun(int sheetIndex, decimal extractionPercentage)
+        {
+            Debug.Assert(sheetIndex > 0);
+
+            Worksheet experimentWorksheet = (Worksheet)mWorkbook.Sheets[sheetIndex];
+            // 가장 작은 인덱스에 있는 값이 있는 셀에서 가장 큰 인덱스에 있는 값이 있는 셀까지가 밤위(빈칸 포함)
+            Excel.Range usedRange = experimentWorksheet.UsedRange;
+
+            bool isTableFound = false;
+            
+            string sourceTableStartAddress = string.Empty;
+            string sourceTableEndAddress = string.Empty;
+            Excel.Range sourceTableStartCell = null;
+            Excel.Range sourceTableEndCell = null;
+            for (int i = 1; i <= usedRange.Rows.Count; ++i)
+            {
+                int checkCount = 0;
+                for (int j = 1; j <= usedRange.Columns.Count; ++j)
+                {
+                    Excel.Range cell = (Excel.Range)usedRange.Cells[i, j];
+                    if (cell.Text == MS_TABLE_HEAD[checkCount])
+                    {
+                        if (checkCount == 0)
+                        {
+                            sourceTableStartCell = (Excel.Range)usedRange.Cells[i, j - 1];
+                        }
+                        if (checkCount == MS_TABLE_HEAD.Length - 1)
+                        {
+                            isTableFound = true;
+                            goto IS_FIND_TABLE;
+                        }
+                        ++checkCount;
+                    }
+                    else
+                    {
+                        checkCount = 0;
+                    }
+                    Marshal.ReleaseComObject(cell);
+                }
+            }
+
+            if (!isTableFound)
+            {
+                goto IS_NOT_FIND_TABLE;
+            }
+
+        IS_FIND_TABLE:
+            // 테이블의 끝 주소 찾기
+            sourceTableStartCell.Value = MS_TABLE_NAME;
+            sourceTableEndCell = sourceTableStartCell.End[XlDirection.xlDown].End[XlDirection.xlToRight];
+            sourceTableEndCell = sourceTableEndCell.Offset[0, 1]; // 열을 하나 추가
+            sourceTableStartAddress = sourceTableStartCell.Address;
+            sourceTableEndAddress = sourceTableEndCell.Address;
+
+            Excel.Range sourceTableRange = experimentWorksheet.Range[sourceTableStartAddress + ":" + sourceTableEndAddress];
+
+            #region 결과 추출
+
+            for (int i = 0; i < 2; ++i)
+            {
+                // 새 워크 시트에 필터링한 값 출력
+                Worksheet newWorksheet = mWorkbook.Sheets.Add();
+                newWorksheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
+
+                // diff 열 계산
+                calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 3, 2);
+                extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
+                                                sourceTableRange, sourceTableStartCell, sourceTableEndCell
+                                                , i, extractionPercentage);
+
+                Marshal.ReleaseComObject(newWorksheet);
+            }
+
+            #endregion
+
+            Marshal.ReleaseComObject(sourceTableStartCell);
+            Marshal.ReleaseComObject(sourceTableEndCell);
+            Marshal.ReleaseComObject(sourceTableRange);
+        IS_NOT_FIND_TABLE:
+            Marshal.ReleaseComObject(usedRange);
+            Marshal.ReleaseComObject(experimentWorksheet);
+
+            return isTableFound;
+        }
+
+        private void extractionMsValueInNewWorksheet(
+            Excel.Worksheet newWorksheet, Excel.Worksheet experimentWorksheet, Excel.Range sourceTableRange, 
+            Excel.Range sourceTableStartCell, Excel.Range sourceTableEndCell,
+            int colNum, decimal extractionPercentage)
+        {
+            // diff열 계산
+            calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 3 + colNum, 2);
+
+            newWorksheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
+
+            Excel.Range criteriaRange = newWorksheet.Range["B1:B2"];
+            newWorksheet.Range["B4"].Value = MS_TABLE_NAME;
+            newWorksheet.Range["C4"].Value = MS_TABLE_HEAD[0];
+            newWorksheet.Range["D4"].Value = MS_TABLE_HEAD[1 + colNum];
+            newWorksheet.Range["E4"].Value = "diff";
+            Excel.Range destinationRange = newWorksheet.Range["B4:E4"];
+            criteriaRange.Cells[1, 1].Value = "diff";
+            criteriaRange.Cells[2, 1].Value =
+                ">=" + experimentWorksheet.Evaluate(
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
+            sourceTableRange.AdvancedFilter(
+                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
+
+            // diff열 계산
+            calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 6 + colNum, 5);
+
+            criteriaRange = newWorksheet.Range["J1:J2"];
+            newWorksheet.Range["J4"].Value = MS_TABLE_NAME;
+            newWorksheet.Range["K4"].Value = MS_TABLE_HEAD[3];
+            newWorksheet.Range["L4"].Value = MS_TABLE_HEAD[4 + colNum];
+            newWorksheet.Range["M4"].Value = "diff";
+            destinationRange = newWorksheet.Range["J4:M4"];
+            criteriaRange.Cells[1, 1].Value = "diff";
+            criteriaRange.Cells[2, 1].Value =
+                ">=" + experimentWorksheet.Evaluate(
+                    $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
+            sourceTableRange.AdvancedFilter(
+                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
+
+            // diff 열 삭제
+            removeMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell);
+
+            Marshal.ReleaseComObject(destinationRange);
+            Marshal.ReleaseComObject(criteriaRange);
+        }
+
+        private void calcMsDiffColumnInTable(
             Excel.Range table, Excel.Range startCell, Excel.Range endCell, int column1, int column2)
         {
             Debug.Assert(table != null);
@@ -52,159 +192,14 @@ namespace Duck.OfficeAutomationModule.Office
             Marshal.ReleaseComObject(resultCell);
         }
 
-        private void removeDiffColumnInTable(Excel.Range table, Excel.Range startCell, Excel.Range endCell)
+        private void removeMsDiffColumnInTable(Excel.Range table, Excel.Range startCell, Excel.Range endCell)
         {
             for (int i = 1; i <= endCell.Row - startCell.Row + 1; i++)
             {
                 table.Cells[i, endCell.Column].Value = string.Empty;
             }
         }
-
-        public bool MsCetsaRun(int sheetIndex, decimal extractionPercentage)
-        {
-            Debug.Assert(sheetIndex > 0);
-
-            Worksheet experimentWorksheet = (Worksheet)mWorkbook.Sheets[sheetIndex];
-            // 가장 작은 인덱스에 있는 값이 있는 셀에서 가장 큰 인덱스에 있는 값이 있는 셀까지가 밤위(빈칸 포함)
-            Excel.Range usedRange = experimentWorksheet.UsedRange;
-
-            bool isTableFound = false;
-            const string startHeadName = "name";
-            string[] tableHead = { "126", "127", "128", "129", "130", "131" };
-            string startTableAddress = string.Empty;
-            string endTableAddress = string.Empty;
-            Excel.Range startTableCell = null;
-            Excel.Range endTableCell = null;
-            for (int i = 1; i <= usedRange.Rows.Count; ++i)
-            {
-                int checkCount = 0;
-                for (int j = 1; j <= usedRange.Columns.Count; ++j)
-                {
-                    Excel.Range cell = (Excel.Range)usedRange.Cells[i, j];
-                    if (cell.Text == tableHead[checkCount])
-                    {
-                        if (checkCount == 0)
-                        {
-                            startTableCell = (Excel.Range)usedRange.Cells[i, j - 1];
-                        }
-                        if (checkCount == tableHead.Length - 1)
-                        {
-                            isTableFound = true;
-                            goto IS_FIND_TABLE;
-                        }
-                        ++checkCount;
-                    }
-                    else
-                    {
-                        checkCount = 0;
-                    }
-                    Marshal.ReleaseComObject(cell);
-                }
-            }
-
-            if (!isTableFound)
-            {
-                goto IS_NOT_FIND_TABLE;
-            }
-
-        IS_FIND_TABLE:
-            // 테이블의 끝 주소 찾기
-            startTableCell.Value = startHeadName;
-            endTableCell = startTableCell.End[XlDirection.xlDown].End[XlDirection.xlToRight];
-            endTableCell = endTableCell.Offset[0, 1]; // 열을 하나 추가
-            startTableAddress = startTableCell.Address;
-            endTableAddress = endTableCell.Address;
-
-            Excel.Range tableRange = experimentWorksheet.Range[startTableAddress + ":" + endTableAddress];
-
-            // 새 워크 시트에 필터링한 값 출력
-            Worksheet newSheet = mWorkbook.Sheets.Add();
-            newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
-            newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
-            // diff 열 계산
-            addDiffColumnInTable(tableRange, startTableCell, endTableCell, 3, 2);
-            Excel.Range criteriaRange = newSheet.Range["B1:B2"];
-            newSheet.Range["B4"].Value = startHeadName;
-            newSheet.Range["C4"].Value = tableHead[0];
-            newSheet.Range["D4"].Value = tableHead[1];
-            newSheet.Range["E4"].Value = "diff";
-            Excel.Range destinationRange = newSheet.Range["B4:E4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
-            tableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
-
-            // diff 열 계산
-            addDiffColumnInTable(tableRange, startTableCell, endTableCell, 6, 5);
-            criteriaRange = newSheet.Range["H1:H2"];
-            newSheet.Range["H4"].Value = startHeadName;
-            newSheet.Range["I4"].Value = tableHead[3];
-            newSheet.Range["J4"].Value = tableHead[4];
-            newSheet.Range["K4"].Value = "diff";
-            destinationRange = newSheet.Range["H4:K4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
-            tableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
-
-            // 새 워크 시트에 필터링한 값 출력
-            newSheet = mWorkbook.Sheets.Add();
-            newSheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
-            newSheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
-            // diff 열 계산
-            addDiffColumnInTable(tableRange, startTableCell, endTableCell, 4, 2);
-            criteriaRange = newSheet.Range["B1:B2"];
-            newSheet.Range["B4"].Value = startHeadName;
-            newSheet.Range["C4"].Value = tableHead[0];
-            newSheet.Range["D4"].Value = tableHead[2];
-            newSheet.Range["E4"].Value = "diff";
-            destinationRange = newSheet.Range["B4:E4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
-            tableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
-
-            // diff 열 계산
-            addDiffColumnInTable(tableRange, startTableCell, endTableCell, 7, 5);
-            criteriaRange = newSheet.Range["H1:H2"];
-            newSheet.Range["H4"].Value = startHeadName;
-            newSheet.Range["I4"].Value = tableHead[3];
-            newSheet.Range["J4"].Value = tableHead[5];
-            newSheet.Range["K4"].Value = "diff";
-            destinationRange = newSheet.Range["H4:K4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[startTableCell.Row, endTableCell.Column].Address}:{experimentWorksheet.Cells[endTableCell.Row, endTableCell.Column].Address}, {1 - extractionPercentage})");
-            tableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
-
-            // diff 열 삭제
-            removeDiffColumnInTable(tableRange, startTableCell, endTableCell);
-
-            Marshal.ReleaseComObject(destinationRange);
-            Marshal.ReleaseComObject(criteriaRange);
-            Marshal.ReleaseComObject(startTableCell);
-            Marshal.ReleaseComObject(endTableCell);
-            Marshal.ReleaseComObject(newSheet);
-            Marshal.ReleaseComObject(tableRange);
-        IS_NOT_FIND_TABLE:
-            Marshal.ReleaseComObject(usedRange);
-            Marshal.ReleaseComObject(experimentWorksheet);
-
-            return isTableFound;
-        }
-
-        public void SetVisible(bool check)
-        {
-            mExcelApp.Visible = check;
-        }
+        #endregion
 
         #region Save, Close and Dispose
         public void Save()
