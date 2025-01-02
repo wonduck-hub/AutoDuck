@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Duck", "Duck\Duck.csproj", "{1E6C3794-43CE-4FF4-B85D-29A7AC4FA842}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfficeFileHandler", "ExcelManager\OfficeFileHandler.csproj", "{5207CC71-0EBD-4D7A-A6BF-12A6839C5935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Duck.OfficeAutomationModule", "ExcelManager\Duck.OfficeAutomationModule.csproj", "{5207CC71-0EBD-4D7A-A6BF-12A6839C5935}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

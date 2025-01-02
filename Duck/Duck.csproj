@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExcelManager\OfficeFileHandler.csproj" />
+    <ProjectReference Include="..\ExcelManager\Duck.OfficeAutomationModule.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,13 +9,13 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 
-using OfficeFileHandler;
+using Duck.OfficeAutomationModule.Office;
 
 namespace Duck
 {
     public partial class Form1 : Form
     {
-        OfficeFileHandler.ExcelFileHandler mExcelHandler = null;
+        ExcelFileHandler mExcelHandler = null;
 
         public Form1()
         {
