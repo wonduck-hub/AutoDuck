@@ -26,7 +26,7 @@ namespace Duck.OfficeAutomationModule.Selenium
             Debug.Assert(name != string.Empty);
 
             ChromeOptions options = new ChromeOptions(); 
-            options.AddArgument("--headless"); // 헤드리스 모드 설정
+            //options.AddArgument("--headless"); // 헤드리스 모드 설정
             ChromeDriver driver = null;
             try
             {

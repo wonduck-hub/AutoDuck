@@ -46,7 +46,7 @@ namespace Duck
                     }
                 }
             }
-            ProteinInfoCrawler.GetInfo("Test");
+
             disableAllControl();
         }
 
