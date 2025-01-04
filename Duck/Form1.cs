@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using System.Net.Http;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
@@ -10,6 +11,7 @@ using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 
 using Duck.OfficeAutomationModule.Office;
+using Duck.OfficeAutomationModule.Selenium;
 
 namespace Duck
 {
@@ -20,7 +22,31 @@ namespace Duck
         public Form1()
         {
             InitializeComponent();
+        }
 
+        private void form1_Shown(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Executable Files|*.exe|All Files|*.*"; 
+                openFileDialog.Title = "Select ChromeDriver Executable"; 
+                openFileDialog.DefaultExt = "exe"; 
+                openFileDialog.AddExtension = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName;
+                    try
+                    {
+                        ProteinInfoCrawler.SetChromeDriverPath(filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                }
+            }
+            ProteinInfoCrawler.GetInfo("Test");
             disableAllControl();
         }
 
@@ -78,16 +104,16 @@ namespace Duck
                 mExcelHandler.Close();
             }
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                saveFileDialog.Filter = "Excel Files|*.xlsx|All Files|*.*";
-                saveFileDialog.Title = "Save an Excel File";
-                saveFileDialog.DefaultExt = "xlsx";
-                saveFileDialog.AddExtension = true;
+                openFileDialog.Filter = "Excel Files|*.xlsx|All Files|*.*";
+                openFileDialog.Title = "Save an Excel File";
+                openFileDialog.DefaultExt = "xlsx";
+                openFileDialog.AddExtension = true;
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    string filePath = saveFileDialog.FileName;
+                    string filePath = openFileDialog.FileName;
                     try
                     {
                         mExcelHandler = new ExcelFileHandler(filePath);
@@ -146,5 +172,7 @@ namespace Duck
         {
             mExcelHandler.Save();
         }
+
+        
     }
 }

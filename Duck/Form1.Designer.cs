@@ -152,6 +152,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AutoDuck";
             FormClosed += form1_Close;
+            Shown += form1_Shown;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)percentageNumericUpDown).EndInit();
