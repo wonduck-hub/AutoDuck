@@ -3,25 +3,24 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Data.Common;
-using Microsoft.Office.Interop.Excel;
 
 namespace Duck.OfficeAutomationModule.Office
 {
     public class ExcelFileHandler : IDisposable
     {
-        private Application mExcelApp;
-        private Workbook mWorkbook;
+        private Excel.Application mExcelApp;
+        private Excel.Workbook mWorkbook;
 
         private static readonly string[] MS_TABLE_HEAD = { "126", "127", "128", "129", "130", "131" };
         private const string MS_TABLE_NAME = "name";
 
         public ExcelFileHandler(string filePath)
         {
-            mExcelApp = new Application();
+            mExcelApp = new Excel.Application();
             mWorkbook = mExcelApp.Workbooks.Open(filePath);
         }
 
-        public Sheets GetSheets()
+        public Excel.Sheets GetSheets()
         {
             return mWorkbook.Sheets;
         }
@@ -36,7 +35,7 @@ namespace Duck.OfficeAutomationModule.Office
         {
             Debug.Assert(sheetIndex > 0);
 
-            Worksheet experimentWorksheet = (Worksheet)mWorkbook.Sheets[sheetIndex];
+            Excel.Worksheet experimentWorksheet = (Excel.Worksheet)mWorkbook.Sheets[sheetIndex];
             // 가장 작은 인덱스에 있는 값이 있는 셀에서 가장 큰 인덱스에 있는 값이 있는 셀까지가 밤위(빈칸 포함)
             Excel.Range usedRange = experimentWorksheet.UsedRange;
 
@@ -81,8 +80,8 @@ namespace Duck.OfficeAutomationModule.Office
         IS_FIND_TABLE:
             // 테이블의 끝 주소 찾기
             sourceTableStartCell.Value = MS_TABLE_NAME;
-            sourceTableEndCell = sourceTableStartCell.End[XlDirection.xlDown].End[XlDirection.xlToRight];
-            sourceTableEndCell = sourceTableEndCell.Offset[0, 1]; // 열을 하나 추가
+            sourceTableEndCell = sourceTableStartCell.End[Excel.XlDirection.xlDown].End[Excel.XlDirection.xlToRight];
+            sourceTableEndCell = sourceTableEndCell.Offset[0, 1]; // 열을 하나 추가해 diff 열로 사용
             sourceTableStartAddress = sourceTableStartCell.Address;
             sourceTableEndAddress = sourceTableEndCell.Address;
 
@@ -93,11 +92,10 @@ namespace Duck.OfficeAutomationModule.Office
             for (int i = 0; i < 2; ++i)
             {
                 // 새 워크 시트에 필터링한 값 출력
-                Worksheet newWorksheet = mWorkbook.Sheets.Add();
+                Excel.Worksheet newWorksheet = mWorkbook.Sheets.Add();
                 newWorksheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
 
                 // diff 열 계산
-                calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 3, 2);
                 extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
                                                 sourceTableRange, sourceTableStartCell, sourceTableEndCell
                                                 , i, extractionPercentage);
@@ -123,7 +121,7 @@ namespace Duck.OfficeAutomationModule.Office
             int colNum, decimal extractionPercentage)
         {
             // diff열 계산
-            calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 3 + colNum, 2);
+            calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 3 + colNum, 2);
 
             newWorksheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
 
@@ -138,10 +136,10 @@ namespace Duck.OfficeAutomationModule.Office
                 ">=" + experimentWorksheet.Evaluate(
                     $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
             sourceTableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
+                Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
 
             // diff열 계산
-            calcMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell, 6 + colNum, 5);
+            calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 6 + colNum, 5);
 
             criteriaRange = newWorksheet.Range["J1:J2"];
             newWorksheet.Range["J4"].Value = MS_TABLE_NAME;
@@ -154,50 +152,57 @@ namespace Duck.OfficeAutomationModule.Office
                 ">=" + experimentWorksheet.Evaluate(
                     $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
             sourceTableRange.AdvancedFilter(
-                XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, XlYesNoGuess.xlNo);
+                Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
 
             // diff 열 삭제
-            removeMsDiffColumnInTable(sourceTableRange, sourceTableStartCell, sourceTableEndCell);
+            removeMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell);
 
             Marshal.ReleaseComObject(destinationRange);
             Marshal.ReleaseComObject(criteriaRange);
         }
 
         private void calcMsDiffColumnInTable(
-            Excel.Range table, Excel.Range startCell, Excel.Range endCell, int column1, int column2)
+            Excel.Worksheet experimentWorksheet, Excel.Range startCell, Excel.Range endCell, int column1, int column2)
         {
-            Debug.Assert(table != null);
+            Debug.Assert(experimentWorksheet != null);
             Debug.Assert(startCell != null);
             Debug.Assert(endCell != null);
             Debug.Assert(column1 > 0);
             Debug.Assert(column2 > 0);
 
-            Excel.Range cell1 = null;
-            Excel.Range cell2 = null;
-            Excel.Range resultCell = null;
-            table.Cells[1, endCell.Column].Value = "diff";
-            for (int i = 2; i <= endCell.Row - startCell.Row + 1; i++)
-            {
-                cell1 = table.Cells[i, column1];
-                cell2 = table.Cells[i, column2];
-                resultCell = table.Cells[i, endCell.Column];
-                if (cell1.Value != null && cell2.Value != null)
-                {
-                    resultCell.Value = cell1.Value - cell2.Value;
-                }
-            }
+            string formulaString = 
+                "=" + ((Excel.Range)experimentWorksheet.Cells[startCell.Row + 1, column1]).Address[false, false] + 
+                "-" + ((Excel.Range)experimentWorksheet.Cells[startCell.Row + 1, column2]).Address[false, false];
 
-            Marshal.ReleaseComObject(cell1);
-            Marshal.ReleaseComObject(cell2);
-            Marshal.ReleaseComObject(resultCell);
+            Excel.Range sourceRange = experimentWorksheet.Cells[startCell.Row + 1, endCell.Column];
+            experimentWorksheet.Cells[startCell.Row, endCell.Column].Value = "diff";
+            Excel.Range destinationRange =
+                experimentWorksheet.Range[experimentWorksheet.Cells[startCell.Row + 1, endCell.Column],
+                                          experimentWorksheet.Cells[endCell.Row, endCell.Column]];
+
+            sourceRange.Formula = formulaString;
+            sourceRange.AutoFill(destinationRange, Excel.XlAutoFillType.xlFillCopy);
+
+            Marshal.ReleaseComObject(sourceRange);
+            Marshal.ReleaseComObject(destinationRange);
         }
 
-        private void removeMsDiffColumnInTable(Excel.Range table, Excel.Range startCell, Excel.Range endCell)
+        private void removeMsDiffColumnInTable(
+            Excel.Worksheet experimentWorksheet, Excel.Range startCell, Excel.Range endCell)
         {
-            for (int i = 1; i <= endCell.Row - startCell.Row + 1; i++)
-            {
-                table.Cells[i, endCell.Column].Value = string.Empty;
-            }
+            Debug.Assert(experimentWorksheet != null);
+            Debug.Assert(startCell != null);
+            Debug.Assert(endCell != null);
+
+            experimentWorksheet.Cells[startCell.Row, endCell.Column].Value = string.Empty;
+            Excel.Range destinationRange =
+                experimentWorksheet.Range[experimentWorksheet.Cells[startCell.Row, endCell.Column],
+                                          experimentWorksheet.Cells[endCell.Row, endCell.Column]];
+
+            experimentWorksheet.Cells[startCell.Row, endCell.Column].AutoFill(
+                destinationRange, Excel.XlAutoFillType.xlFillCopy);
+
+            Marshal.ReleaseComObject(destinationRange);
         }
         #endregion
 

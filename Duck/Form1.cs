@@ -7,8 +7,6 @@ using System.Diagnostics;
 using System.Security.Policy;
 
 using Excel = Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
 
 using Duck.OfficeAutomationModule.Office;
 using Duck.OfficeAutomationModule.Selenium;
@@ -44,6 +42,13 @@ namespace Duck
                     {
                         Debug.WriteLine(ex);
                     }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Chrome Driver를 설정해야 사용할 수 있습니다.", "Error", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
                 }
             }
 
