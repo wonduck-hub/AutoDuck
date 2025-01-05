@@ -68,7 +68,6 @@ namespace Duck.OfficeAutomationModule.Office
                     {
                         checkCount = 0;
                     }
-                    Marshal.ReleaseComObject(cell);
                 }
             }
 
@@ -105,13 +104,7 @@ namespace Duck.OfficeAutomationModule.Office
 
             #endregion
 
-            Marshal.ReleaseComObject(sourceTableStartCell);
-            Marshal.ReleaseComObject(sourceTableEndCell);
-            Marshal.ReleaseComObject(sourceTableRange);
         IS_NOT_FIND_TABLE:
-            Marshal.ReleaseComObject(usedRange);
-            Marshal.ReleaseComObject(experimentWorksheet);
-
             return isTableFound;
         }
 
@@ -156,9 +149,6 @@ namespace Duck.OfficeAutomationModule.Office
 
             // diff 열 삭제
             removeMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell);
-
-            Marshal.ReleaseComObject(destinationRange);
-            Marshal.ReleaseComObject(criteriaRange);
         }
 
         #region calcDiff
@@ -183,9 +173,6 @@ namespace Duck.OfficeAutomationModule.Office
 
             sourceRange.Formula = formulaString;
             sourceRange.AutoFill(destinationRange, Excel.XlAutoFillType.xlFillCopy);
-
-            Marshal.ReleaseComObject(sourceRange);
-            Marshal.ReleaseComObject(destinationRange);
         }
 
         private void removeMsDiffColumnInTable(
@@ -202,8 +189,6 @@ namespace Duck.OfficeAutomationModule.Office
 
             experimentWorksheet.Cells[startCell.Row, endCell.Column].AutoFill(
                 destinationRange, Excel.XlAutoFillType.xlFillCopy);
-
-            Marshal.ReleaseComObject(destinationRange);
         }
         #endregion
         #endregion
@@ -221,7 +206,6 @@ namespace Duck.OfficeAutomationModule.Office
                 if (mWorkbook != null)
                 {
                     mWorkbook.Close(true); // 저장하고 닫기
-                    Marshal.ReleaseComObject(mWorkbook);
                 }
             }
             catch (Exception e)
@@ -234,7 +218,6 @@ namespace Duck.OfficeAutomationModule.Office
                 if (mExcelApp != null)
                 {
                     mExcelApp.Quit();
-                    Marshal.ReleaseComObject(mExcelApp);
                 }
             }
             catch (Exception e)
