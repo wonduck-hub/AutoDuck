@@ -161,6 +161,7 @@ namespace Duck.OfficeAutomationModule.Office
             Marshal.ReleaseComObject(criteriaRange);
         }
 
+        #region calcDiff
         private void calcMsDiffColumnInTable(
             Excel.Worksheet experimentWorksheet, Excel.Range startCell, Excel.Range endCell, int column1, int column2)
         {
@@ -204,6 +205,7 @@ namespace Duck.OfficeAutomationModule.Office
 
             Marshal.ReleaseComObject(destinationRange);
         }
+        #endregion
         #endregion
 
         #region Save, Close and Dispose

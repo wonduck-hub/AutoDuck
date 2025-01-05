@@ -152,10 +152,14 @@ namespace Duck
 
         private void runButton_Click(object sender, EventArgs e)
         {
+            Stopwatch watch = new Stopwatch();
+
             disableAllControl();
             this.Cursor = Cursors.WaitCursor;
 
+            watch.Start();
             bool isSucess = mExcelHandler.MsCetsaRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
+            watch.Stop();
 
             this.Cursor = Cursors.Default;
             enableAllControl();
@@ -163,7 +167,7 @@ namespace Duck
 
             if (isSucess)
             {
-                MessageBox.Show("sucess!", "Sucess",
+                MessageBox.Show("sucess!\n경과 시간: " + watch.ElapsedMilliseconds + "ms", "Sucess",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
