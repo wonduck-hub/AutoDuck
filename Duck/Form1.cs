@@ -24,6 +24,13 @@ namespace Duck
 
         private void form1_Shown(object sender, EventArgs e)
         {
+            if (!ExcelFileHandler.IsExcelInstalled())
+            {
+                MessageBox.Show(
+                        "MS Excel이 설치되어 있지 않습니다.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+            }
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "Executable Files|*.exe|All Files|*.*"; 

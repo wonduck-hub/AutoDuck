@@ -14,6 +14,23 @@ namespace Duck.OfficeAutomationModule.Office
         private static readonly string[] MS_TABLE_HEAD = { "126", "127", "128", "129", "130", "131" };
         private const string MS_TABLE_NAME = "name";
 
+        static public bool IsExcelInstalled()
+        {
+            try { 
+                Type excelType = Type.GetTypeFromProgID("Excel.Application");
+                if (excelType == null) 
+                { 
+                    return false; 
+                } 
+                dynamic excelApp = Activator.CreateInstance(excelType); 
+                return true; 
+            }
+            catch 
+            { 
+                return false;
+            }
+        }
+
         public ExcelFileHandler(string filePath)
         {
             mExcelApp = new Excel.Application();
