@@ -9,7 +9,6 @@ using System.Security.Policy;
 using Excel = Microsoft.Office.Interop.Excel;
 
 using Duck.OfficeAutomationModule.Office;
-using Duck.OfficeAutomationModule.Selenium;
 
 namespace Duck
 {
@@ -30,33 +29,6 @@ namespace Duck
                         "MS Excel이 설치되어 있지 않습니다.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
-            }
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Executable Files|*.exe|All Files|*.*"; 
-                openFileDialog.Title = "Select ChromeDriver Executable"; 
-                openFileDialog.DefaultExt = "exe"; 
-                openFileDialog.AddExtension = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string filePath = openFileDialog.FileName;
-                    try
-                    {
-                        ProteinInfoCrawler.SetChromeDriverPath(filePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Chrome Driver를 설정해야 사용할 수 있습니다.", "Error", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
-                }
             }
 
             disableAllControl();
@@ -165,7 +137,7 @@ namespace Duck
             this.Cursor = Cursors.WaitCursor;
 
             watch.Start();
-            bool isSucess = mExcelHandler.MsCetsaRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
+            bool isSucess = mExcelHandler.CetsaMsRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
             watch.Stop();
 
             this.Cursor = Cursors.Default;

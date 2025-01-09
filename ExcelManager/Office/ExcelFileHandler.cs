@@ -47,8 +47,8 @@ namespace Duck.OfficeAutomationModule.Office
             mExcelApp.Visible = check;
         }
 
-        #region MsCetsa
-        public bool MsCetsaRun(int sheetIndex, decimal extractionPercentage)
+        #region CETSA-MS
+        public bool CetsaMsRun(int sheetIndex, decimal extractionPercentage)
         {
             Debug.Assert(sheetIndex > 0);
 
