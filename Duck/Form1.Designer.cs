@@ -88,7 +88,7 @@
             // 
             worksheetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             worksheetsComboBox.FormattingEnabled = true;
-            worksheetsComboBox.Location = new Point(119, 48);
+            worksheetsComboBox.Location = new Point(147, 48);
             worksheetsComboBox.Name = "worksheetsComboBox";
             worksheetsComboBox.Size = new Size(121, 23);
             worksheetsComboBox.TabIndex = 3;
@@ -116,7 +116,7 @@
             // 
             percentageNumericUpDown.DecimalPlaces = 2;
             percentageNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            percentageNumericUpDown.Location = new Point(119, 77);
+            percentageNumericUpDown.Location = new Point(147, 77);
             percentageNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             percentageNumericUpDown.Name = "percentageNumericUpDown";
             percentageNumericUpDown.Size = new Size(120, 23);
@@ -128,9 +128,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(12, 79);
             label2.Name = "label2";
-            label2.Size = new Size(69, 15);
+            label2.Size = new Size(124, 15);
             label2.TabIndex = 7;
-            label2.Text = "percentage:";
+            label2.Text = "extraction percentage:";
             // 
             // Form1
             // 

@@ -142,9 +142,8 @@ namespace Duck.OfficeAutomationModule.Office
             newWorksheet.Range["E4"].Value = "diff";
             Excel.Range destinationRange = newWorksheet.Range["B4:E4"];
             criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
+            criteriaRange.Cells[2, 1].Value = 
+                ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
             sourceTableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
 
@@ -159,8 +158,7 @@ namespace Duck.OfficeAutomationModule.Office
             destinationRange = newWorksheet.Range["J4:M4"];
             criteriaRange.Cells[1, 1].Value = "diff";
             criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate(
-                    $"PERCENTILE.INC({experimentWorksheet.Cells[sourceTableStartCell.Row, sourceTableEndCell.Column].Address}:{experimentWorksheet.Cells[sourceTableEndCell.Row, sourceTableEndCell.Column].Address}, {1 - extractionPercentage})");
+                ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
             sourceTableRange.AdvancedFilter(
                 Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
 
