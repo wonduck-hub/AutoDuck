@@ -40,7 +40,7 @@ namespace Duck.OfficeAutomationModule.RestApi
 
         public static async Task<string> GetFilteredProteinDataOrNullAsync(string accession)
         {
-            string apiUrl = $"{PROTEINS_URL}?accession={accession}"; // URL에 조건을 넣어 필요한 data만 가져오도록 수정
+            string apiUrl = $"{PROTEINS_URL}?accession={accession}"; // TODO: URL에 조건을 넣어 필요한 data만 가져오도록 수정
             HttpResponseMessage response = await _client.GetAsync(apiUrl);
 
             if (response.IsSuccessStatusCode)
