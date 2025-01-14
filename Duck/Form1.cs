@@ -9,6 +9,7 @@ using System.Security.Policy;
 using Excel = Microsoft.Office.Interop.Excel;
 
 using Duck.OfficeAutomationModule.Office;
+using Duck.OfficeAutomationModule.RestApi;
 
 namespace Duck
 {
