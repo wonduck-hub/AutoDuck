@@ -130,7 +130,7 @@ namespace Duck
             }
         }
 
-        private void runButton_Click(object sender, EventArgs e)
+        private async void runButton_Click(object sender, EventArgs e)
         {
             Stopwatch watch = new Stopwatch();
 
@@ -138,7 +138,7 @@ namespace Duck
             this.Cursor = Cursors.WaitCursor;
 
             watch.Start();
-            bool isSucess = mExcelHandler.CetsaMsRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
+            bool isSucess = await mExcelHandler.CetsaMsRun(worksheetsComboBox.SelectedIndex + 1, percentageNumericUpDown.Value);
             watch.Stop();
 
             this.Cursor = Cursors.Default;

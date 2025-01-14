@@ -48,7 +48,7 @@ namespace Duck.OfficeAutomationModule.Office
         }
 
         #region CETSA-MS
-        public bool CetsaMsRun(int sheetIndex, decimal extractionPercentage)
+        public async Task<bool> CetsaMsRun(int sheetIndex, decimal extractionPercentage)
         {
             Debug.Assert(sheetIndex > 0);
 
@@ -112,7 +112,7 @@ namespace Duck.OfficeAutomationModule.Office
                 newWorksheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
 
                 // diff 열 계산
-                extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
+                await extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
                                                 sourceTableRange, sourceTableStartCell, sourceTableEndCell
                                                 , i, extractionPercentage);
 
@@ -125,11 +125,12 @@ namespace Duck.OfficeAutomationModule.Office
             return isTableFound;
         }
 
-        private void extractionMsValueInNewWorksheet(
+        private async Task extractionMsValueInNewWorksheet(
             Excel.Worksheet newWorksheet, Excel.Worksheet experimentWorksheet, Excel.Range sourceTableRange, 
             Excel.Range sourceTableStartCell, Excel.Range sourceTableEndCell,
             int colNum, decimal extractionPercentage)
         {
+            // TODO: 여기서 추출한 단백질에 대한 정보 출력 코드 추가
             // diff열 계산
             calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 3 + colNum, 2);
 
