@@ -14,40 +14,56 @@ namespace Duck.OfficeAutomationModule.RestApi
 
         private static readonly HttpClient _client = new HttpClient();
 
-        public static async Task<string> GetProteinDataOrNullAsync(string accession)
+        public static async Task<string> GetProteinDataAsync(string accession)
         {
-            string apiUrl = $"{PROTEINS_URL}?accession={accession}";
-            HttpResponseMessage response = await _client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
+                string apiUrl = $"{PROTEINS_URL}?accession={accession}";
+                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+
                 return await response.Content.ReadAsStringAsync();
             }
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return $"Error: {ex.Message}";
+
+            }
         }
+
 
         public static async Task<string> GetCoordinatesDataOrNullAsync(string accession)
         {
-            string apiUrl = $"{COORDINATES_URL}?accession={accession}";
-            HttpResponseMessage response = await _client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
+                string apiUrl = $"{COORDINATES_URL}?accession={accession}";
+                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+
                 return await response.Content.ReadAsStringAsync();
             }
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return $"Error: {ex.Message}";
+
+            }
         }
 
         public static async Task<string> GetFilteredProteinDataOrNullAsync(string accession)
         {
-            string apiUrl = $"{PROTEINS_URL}?accession={accession}"; // TODO: URL에 조건을 넣어 필요한 data만 가져오도록 수정
-            HttpResponseMessage response = await _client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
+                string apiUrl = $"{PROTEINS_URL}?accession={accession}";
+                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+
                 return await response.Content.ReadAsStringAsync();
             }
-            return null;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return $"Error: {ex.Message}";
+
+            }
         }
     }
 }

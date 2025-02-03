@@ -36,11 +36,11 @@ namespace Duck
         }
 
         #region Uniprot API
-        private void proteinInfoButton_Click(object sender, EventArgs e)
+        private async void proteinInfoButton_Click(object sender, EventArgs e)
         {
             string uniProtSerialNum = mExcelHandler.GetActiveCellValue();
 
-            //string uniProtXML = await UniProtApi.GetProteinDataOrNullAsync(uniProtSerialNum);
+            string uniProtXML = await UniProtApi.GetProteinDataAsync(uniProtSerialNum);
         }
         #endregion
 
