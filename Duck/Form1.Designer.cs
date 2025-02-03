@@ -40,6 +40,7 @@
             percentageNumericUpDown = new NumericUpDown();
             label2 = new Label();
             proteinInfoButton = new Button();
+            proteinInfoTextBox = new TextBox();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)percentageNumericUpDown).BeginInit();
             SuspendLayout();
@@ -143,11 +144,22 @@
             proteinInfoButton.UseVisualStyleBackColor = true;
             proteinInfoButton.Click += proteinInfoButton_Click;
             // 
+            // proteinInfoTextBox
+            // 
+            proteinInfoTextBox.Location = new Point(147, 160);
+            proteinInfoTextBox.Multiline = true;
+            proteinInfoTextBox.Name = "proteinInfoTextBox";
+            proteinInfoTextBox.ReadOnly = true;
+            proteinInfoTextBox.ScrollBars = ScrollBars.Vertical;
+            proteinInfoTextBox.Size = new Size(641, 225);
+            proteinInfoTextBox.TabIndex = 10;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(proteinInfoTextBox);
             Controls.Add(proteinInfoButton);
             Controls.Add(label2);
             Controls.Add(percentageNumericUpDown);
@@ -182,5 +194,6 @@
         private NumericUpDown percentageNumericUpDown;
         private Label label2;
         private Button proteinInfoButton;
+        private TextBox proteinInfoTextBox;
     }
 }

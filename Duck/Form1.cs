@@ -39,8 +39,9 @@ namespace Duck
         private async void proteinInfoButton_Click(object sender, EventArgs e)
         {
             string uniProtSerialNum = mExcelHandler.GetActiveCellValue();
-
             string uniProtXML = await UniProtApi.GetProteinDataAsync(uniProtSerialNum);
+
+            // TODO: proteinInfoTextBox에 xml에서 추출한 정보들을 나열하는 코드 추가
         }
         #endregion
 
@@ -67,6 +68,7 @@ namespace Duck
             saveFileToolStripMenuItem.Enabled = false;
             percentageNumericUpDown.Enabled = false;
             proteinInfoButton.Enabled = false;
+            proteinInfoTextBox.Enabled = false;
         }
 
         private void enableAllControl()
@@ -77,6 +79,7 @@ namespace Duck
             saveFileToolStripMenuItem.Enabled = true;
             percentageNumericUpDown.Enabled = true;
             proteinInfoButton.Enabled = true;
+            proteinInfoTextBox.Enabled = true;
         }
         #endregion
 
