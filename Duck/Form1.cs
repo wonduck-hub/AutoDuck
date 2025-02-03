@@ -35,6 +35,15 @@ namespace Duck
             disableAllControl();
         }
 
+        #region Uniprot API
+        private void proteinInfoButton_Click(object sender, EventArgs e)
+        {
+            string uniProtSerialNum = mExcelHandler.GetActiveCellValue();
+
+            //string uniProtXML = await UniProtApi.GetProteinDataOrNullAsync(uniProtSerialNum);
+        }
+        #endregion
+
         #region Load Close
         private void form1_Load(object sender, EventArgs e)
         {
@@ -57,6 +66,7 @@ namespace Duck
             runButton.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             percentageNumericUpDown.Enabled = false;
+            proteinInfoButton.Enabled = false;
         }
 
         private void enableAllControl()
@@ -66,6 +76,7 @@ namespace Duck
             runButton.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             percentageNumericUpDown.Enabled = true;
+            proteinInfoButton.Enabled = true;
         }
         #endregion
 
@@ -161,7 +172,5 @@ namespace Duck
         {
             mExcelHandler.Save();
         }
-
-        
     }
 }

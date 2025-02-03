@@ -39,6 +39,7 @@
             label1 = new Label();
             percentageNumericUpDown = new NumericUpDown();
             label2 = new Label();
+            proteinInfoButton = new Button();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)percentageNumericUpDown).BeginInit();
             SuspendLayout();
@@ -132,11 +133,22 @@
             label2.TabIndex = 7;
             label2.Text = "extraction percentage:";
             // 
+            // proteinInfoButton
+            // 
+            proteinInfoButton.Location = new Point(12, 160);
+            proteinInfoButton.Name = "proteinInfoButton";
+            proteinInfoButton.Size = new Size(124, 46);
+            proteinInfoButton.TabIndex = 8;
+            proteinInfoButton.Text = "Protein info";
+            proteinInfoButton.UseVisualStyleBackColor = true;
+            proteinInfoButton.Click += proteinInfoButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(proteinInfoButton);
             Controls.Add(label2);
             Controls.Add(percentageNumericUpDown);
             Controls.Add(label1);
@@ -146,8 +158,6 @@
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
-            MaximumSize = new Size(816, 489);
-            MinimumSize = new Size(816, 489);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AutoDuck";
@@ -171,5 +181,6 @@
         private Label label1;
         private NumericUpDown percentageNumericUpDown;
         private Label label2;
+        private Button proteinInfoButton;
     }
 }

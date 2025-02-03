@@ -11,6 +11,7 @@ namespace Duck.OfficeAutomationModule.Office
         private Excel.Application mExcelApp;
         private Excel.Workbook mWorkbook;
 
+        // 일단 이 배관들만 사용한다고 가정
         private static readonly string[] MS_TABLE_HEAD = { "126", "127", "128", "129", "130", "131" };
         private const string MS_TABLE_NAME = "name";
 
@@ -45,6 +46,11 @@ namespace Duck.OfficeAutomationModule.Office
         public void SetVisible(bool check)
         {
             mExcelApp.Visible = check;
+        }
+
+        public string GetActiveCellValue()
+        {
+            return mExcelApp.ActiveCell.Text;
         }
 
         #region CETSA-MS
