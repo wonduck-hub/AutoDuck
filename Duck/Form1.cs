@@ -10,6 +10,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 using Duck.OfficeAutomationModule.Office;
 using Duck.OfficeAutomationModule.RestApi;
+using System.Xml;
 
 namespace Duck
 {
@@ -39,9 +40,96 @@ namespace Duck
         private async void proteinInfoButton_Click(object sender, EventArgs e)
         {
             string uniProtSerialNum = mExcelHandler.GetActiveCellValue();
-            string uniProtXML = await UniProtApi.GetProteinDataAsync(uniProtSerialNum);
+            string uniProtXML = await UniProtApi.GetProteinDataOrNullAsync(uniProtSerialNum);
 
-            // TODO: proteinInfoTextBox에 xml에서 추출한 정보들을 나열하는 코드 추가
+            if (uniProtXML != null)
+            {
+                proteinInfoTextBox.Text = String.Empty;
+
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(uniProtXML);
+
+                XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+                nsmgr.AddNamespace("u", "http://uniprot.org/uniprot");
+
+                XmlNode nameNode = doc.SelectSingleNode("//*[local-name()='entry']");
+                if (nameNode != null)
+                {
+                    string entryName = 
+                        nameNode.SelectSingleNode("*[local-name()='name']").InnerText;
+
+                    proteinInfoTextBox.AppendText($"Entry Name: {entryName}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText(Environment.NewLine);
+                }
+                else
+                {
+                    proteinInfoTextBox.AppendText($"Entry Name 없음{Environment.NewLine}");
+                }
+
+                XmlNode geneNode = doc.SelectSingleNode("//*[local-name()='gene']");
+                if (nameNode != null)
+                {
+                    string geneName =
+                        geneNode.SelectSingleNode("*[local-name()='name' and @type='primary']").InnerText;
+
+                    proteinInfoTextBox.AppendText($"Gene Name: {geneName}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText(Environment.NewLine);
+                }
+                else
+                {
+                    proteinInfoTextBox.AppendText($"Gene Name 없음{Environment.NewLine}");
+                }
+
+                XmlNode proteinRecommendedNameNode = 
+                    doc.SelectSingleNode("//*[local-name()='protein']/*[local-name()='recommendedName']");
+                if (nameNode != null)
+                {
+                    string proteinFullName =
+                        proteinRecommendedNameNode.SelectSingleNode("*[local-name()='fullName']").InnerText;
+
+                    proteinInfoTextBox.AppendText(
+                        $"Protein Full Name: {proteinFullName}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText(Environment.NewLine);
+                }
+                else
+                {
+                    proteinInfoTextBox.AppendText($"Gene Name 없음{Environment.NewLine}");
+                }
+
+                XmlNode organismNode = doc.SelectSingleNode("//*[local-name()='organism']");
+                if (organismNode != null)
+                {
+                    string scientificName = 
+                        organismNode.SelectSingleNode("*[local-name()='name' and @type='scientific']").InnerText;
+                    string commonName = 
+                        organismNode.SelectSingleNode("*[local-name()='name' and @type='common']").InnerText;
+                    string taxonomyId = 
+                        organismNode.SelectSingleNode(
+                            "*[local-name()='dbReference' and @type='NCBI Taxonomy']").Attributes["id"].Value;
+
+                    proteinInfoTextBox.AppendText($"Scientific Name: {scientificName}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText($"Common Name: {commonName}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText($"Taxonomy ID: {taxonomyId}{Environment.NewLine}");
+                    proteinInfoTextBox.AppendText(Environment.NewLine);
+
+                    proteinInfoTextBox.AppendText($"Lineage:{Environment.NewLine}");
+                    XmlNodeList lineageNodes = 
+                        organismNode.SelectNodes("*[local-name()='lineage']/*[local-name()='taxon']");
+                    foreach (XmlNode taxon in lineageNodes)
+                    {
+                        proteinInfoTextBox.AppendText($"{taxon.InnerText}{Environment.NewLine}");
+                    }
+                    proteinInfoTextBox.AppendText(Environment.NewLine);
+                }
+                else
+                {
+                    proteinInfoTextBox.AppendText($"Organism 없음{Environment.NewLine}");
+                }
+            }
+            else
+            {
+                proteinInfoTextBox.Text = $"error!";
+            }
         }
         #endregion
 

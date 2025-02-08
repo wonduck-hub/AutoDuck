@@ -47,10 +47,12 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.ImageScalingSize = new Size(36, 36);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Padding = new Padding(13, 5, 0, 5);
+            menuStrip1.Size = new Size(1714, 51);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -58,29 +60,30 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openFileToolStripMenuItem, saveFileToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Size = new Size(80, 41);
             fileToolStripMenuItem.Text = "File";
             // 
             // openFileToolStripMenuItem
             // 
             openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            openFileToolStripMenuItem.Size = new Size(98, 22);
+            openFileToolStripMenuItem.Size = new Size(222, 48);
             openFileToolStripMenuItem.Text = "File";
             openFileToolStripMenuItem.Click += openFileToolStripMenuItem_Click;
             // 
             // saveFileToolStripMenuItem
             // 
             saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            saveFileToolStripMenuItem.Size = new Size(98, 22);
+            saveFileToolStripMenuItem.Size = new Size(222, 48);
             saveFileToolStripMenuItem.Text = "Save";
             saveFileToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // showExcelWindowCheckBox
             // 
             showExcelWindowCheckBox.AutoSize = true;
-            showExcelWindowCheckBox.Location = new Point(689, 50);
+            showExcelWindowCheckBox.Location = new Point(1476, 123);
+            showExcelWindowCheckBox.Margin = new Padding(6, 7, 6, 7);
             showExcelWindowCheckBox.Name = "showExcelWindowCheckBox";
-            showExcelWindowCheckBox.Size = new Size(99, 19);
+            showExcelWindowCheckBox.Size = new Size(214, 41);
             showExcelWindowCheckBox.TabIndex = 2;
             showExcelWindowCheckBox.Text = "Excel Window";
             showExcelWindowCheckBox.UseVisualStyleBackColor = true;
@@ -90,16 +93,18 @@
             // 
             worksheetsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             worksheetsComboBox.FormattingEnabled = true;
-            worksheetsComboBox.Location = new Point(147, 48);
+            worksheetsComboBox.Location = new Point(315, 118);
+            worksheetsComboBox.Margin = new Padding(6, 7, 6, 7);
             worksheetsComboBox.Name = "worksheetsComboBox";
-            worksheetsComboBox.Size = new Size(121, 23);
+            worksheetsComboBox.Size = new Size(255, 45);
             worksheetsComboBox.TabIndex = 3;
             // 
             // runButton
             // 
-            runButton.Location = new Point(12, 391);
+            runButton.Location = new Point(26, 272);
+            runButton.Margin = new Padding(6, 7, 6, 7);
             runButton.Name = "runButton";
-            runButton.Size = new Size(776, 47);
+            runButton.Size = new Size(266, 113);
             runButton.TabIndex = 4;
             runButton.Text = "Run";
             runButton.UseVisualStyleBackColor = true;
@@ -108,9 +113,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 51);
+            label1.Location = new Point(26, 126);
+            label1.Margin = new Padding(6, 0, 6, 0);
             label1.Name = "label1";
-            label1.Size = new Size(84, 15);
+            label1.Size = new Size(190, 37);
             label1.TabIndex = 5;
             label1.Text = "selected sheet:";
             // 
@@ -118,27 +124,30 @@
             // 
             percentageNumericUpDown.DecimalPlaces = 2;
             percentageNumericUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            percentageNumericUpDown.Location = new Point(147, 77);
+            percentageNumericUpDown.Location = new Point(315, 190);
+            percentageNumericUpDown.Margin = new Padding(6, 7, 6, 7);
             percentageNumericUpDown.Maximum = new decimal(new int[] { 1, 0, 0, 0 });
             percentageNumericUpDown.Name = "percentageNumericUpDown";
-            percentageNumericUpDown.Size = new Size(120, 23);
+            percentageNumericUpDown.Size = new Size(257, 43);
             percentageNumericUpDown.TabIndex = 6;
             percentageNumericUpDown.Value = new decimal(new int[] { 1, 0, 0, 65536 });
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 79);
+            label2.Location = new Point(26, 195);
+            label2.Margin = new Padding(6, 0, 6, 0);
             label2.Name = "label2";
-            label2.Size = new Size(124, 15);
+            label2.Size = new Size(280, 37);
             label2.TabIndex = 7;
             label2.Text = "extraction percentage:";
             // 
             // proteinInfoButton
             // 
-            proteinInfoButton.Location = new Point(12, 160);
+            proteinInfoButton.Location = new Point(26, 395);
+            proteinInfoButton.Margin = new Padding(6, 7, 6, 7);
             proteinInfoButton.Name = "proteinInfoButton";
-            proteinInfoButton.Size = new Size(124, 46);
+            proteinInfoButton.Size = new Size(266, 113);
             proteinInfoButton.TabIndex = 8;
             proteinInfoButton.Text = "Protein info";
             proteinInfoButton.UseVisualStyleBackColor = true;
@@ -146,19 +155,20 @@
             // 
             // proteinInfoTextBox
             // 
-            proteinInfoTextBox.Location = new Point(147, 160);
+            proteinInfoTextBox.Location = new Point(315, 395);
+            proteinInfoTextBox.Margin = new Padding(6, 7, 6, 7);
             proteinInfoTextBox.Multiline = true;
             proteinInfoTextBox.Name = "proteinInfoTextBox";
             proteinInfoTextBox.ReadOnly = true;
             proteinInfoTextBox.ScrollBars = ScrollBars.Vertical;
-            proteinInfoTextBox.Size = new Size(641, 225);
+            proteinInfoTextBox.Size = new Size(1369, 699);
             proteinInfoTextBox.TabIndex = 10;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(15F, 37F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1714, 1110);
             Controls.Add(proteinInfoTextBox);
             Controls.Add(proteinInfoButton);
             Controls.Add(label2);
@@ -170,6 +180,7 @@
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(6, 7, 6, 7);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AutoDuck";

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Duck.OfficeAutomationModule.RestApi
 {
@@ -14,8 +15,10 @@ namespace Duck.OfficeAutomationModule.RestApi
 
         private static readonly HttpClient _client = new HttpClient();
 
-        public static async Task<string> GetProteinDataAsync(string accession)
+        public static async Task<string> GetProteinDataOrNullAsync(string accession)
         {
+            Debug.Assert(accession != null);
+
             try
             {
                 string apiUrl = $"{PROTEINS_URL}?accession={accession}";
@@ -26,14 +29,15 @@ namespace Duck.OfficeAutomationModule.RestApi
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return $"Error: {ex.Message}";
-
+                return null;
             }
         }
 
 
         public static async Task<string> GetCoordinatesDataOrNullAsync(string accession)
         {
+            Debug.Assert(accession != null);
+
             try
             {
                 string apiUrl = $"{COORDINATES_URL}?accession={accession}";
@@ -44,13 +48,14 @@ namespace Duck.OfficeAutomationModule.RestApi
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return $"Error: {ex.Message}";
-
+                return null;
             }
         }
 
         public static async Task<string> GetFilteredProteinDataOrNullAsync(string accession)
         {
+            Debug.Assert(accession != null);
+
             try
             {
                 string apiUrl = $"{PROTEINS_URL}?accession={accession}";
@@ -61,8 +66,7 @@ namespace Duck.OfficeAutomationModule.RestApi
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return $"Error: {ex.Message}";
-
+                return null;
             }
         }
     }
