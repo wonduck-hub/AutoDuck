@@ -117,58 +117,48 @@ namespace Duck.OfficeAutomationModule.Office
                 Excel.Worksheet newWorksheet = mWorkbook.Sheets.Add();
                 newWorksheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
 
+                #region 새 워크시트에 결과 출력
                 // diff 열 계산
-                extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
-                                                sourceTableRange, sourceTableStartCell, sourceTableEndCell
-                                                , i, extractionPercentage);
+                calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 3 + i, 2);
+
+                newWorksheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
+
+                Excel.Range criteriaRange = newWorksheet.Range["B1:B2"];
+                newWorksheet.Range["B4"].Value = MS_TABLE_NAME;
+                newWorksheet.Range["C4"].Value = MS_TABLE_HEAD[0];
+                newWorksheet.Range["D4"].Value = MS_TABLE_HEAD[1 + i];
+                newWorksheet.Range["E4"].Value = "diff";
+                Excel.Range destinationRange = newWorksheet.Range["B4:E4"];
+                criteriaRange.Cells[1, 1].Value = "diff";
+                criteriaRange.Cells[2, 1].Value =
+                    ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
+                sourceTableRange.AdvancedFilter(
+                    Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
+
+                // diff열 계산
+                calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 6 + i, 5);
+
+                criteriaRange = newWorksheet.Range["J1:J2"];
+                newWorksheet.Range["J4"].Value = MS_TABLE_NAME;
+                newWorksheet.Range["K4"].Value = MS_TABLE_HEAD[3];
+                newWorksheet.Range["L4"].Value = MS_TABLE_HEAD[4 + i];
+                newWorksheet.Range["M4"].Value = "diff";
+                destinationRange = newWorksheet.Range["J4:M4"];
+                criteriaRange.Cells[1, 1].Value = "diff";
+                criteriaRange.Cells[2, 1].Value =
+                    ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
+                sourceTableRange.AdvancedFilter(
+                    Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
+
+                // diff 열 삭제
+                removeMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell);
+                #endregion
             }
 
             #endregion
 
         IS_NOT_FIND_TABLE:
             return isTableFound;
-        }
-
-        private void extractionMsValueInNewWorksheet(
-            Excel.Worksheet newWorksheet, Excel.Worksheet experimentWorksheet, Excel.Range sourceTableRange, 
-            Excel.Range sourceTableStartCell, Excel.Range sourceTableEndCell,
-            int colNum, decimal extractionPercentage)
-        {
-            // TODO: 여기서 추출한 단백질에 대한 정보 출력 코드 추가
-            // diff열 계산
-            calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 3 + colNum, 2);
-
-            newWorksheet.Cells[1, 1].Value = ((int)(extractionPercentage * 100)).ToString() + "%";
-
-            Excel.Range criteriaRange = newWorksheet.Range["B1:B2"];
-            newWorksheet.Range["B4"].Value = MS_TABLE_NAME;
-            newWorksheet.Range["C4"].Value = MS_TABLE_HEAD[0];
-            newWorksheet.Range["D4"].Value = MS_TABLE_HEAD[1 + colNum];
-            newWorksheet.Range["E4"].Value = "diff";
-            Excel.Range destinationRange = newWorksheet.Range["B4:E4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value = 
-                ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
-            sourceTableRange.AdvancedFilter(
-                Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
-
-            // diff열 계산
-            calcMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell, 6 + colNum, 5);
-
-            criteriaRange = newWorksheet.Range["J1:J2"];
-            newWorksheet.Range["J4"].Value = MS_TABLE_NAME;
-            newWorksheet.Range["K4"].Value = MS_TABLE_HEAD[3];
-            newWorksheet.Range["L4"].Value = MS_TABLE_HEAD[4 + colNum];
-            newWorksheet.Range["M4"].Value = "diff";
-            destinationRange = newWorksheet.Range["J4:M4"];
-            criteriaRange.Cells[1, 1].Value = "diff";
-            criteriaRange.Cells[2, 1].Value =
-                ">=" + experimentWorksheet.Evaluate($"Log({1 + extractionPercentage}, 2)");
-            sourceTableRange.AdvancedFilter(
-                Excel.XlFilterAction.xlFilterCopy, criteriaRange, destinationRange, Excel.XlYesNoGuess.xlNo);
-
-            // diff 열 삭제
-            removeMsDiffColumnInTable(experimentWorksheet, sourceTableStartCell, sourceTableEndCell);
         }
 
         #region calcDiff
