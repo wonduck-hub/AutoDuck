@@ -54,7 +54,7 @@ namespace Duck.OfficeAutomationModule.Office
         }
 
         #region CETSA-MS
-        public async Task<bool> CetsaMsRun(int sheetIndex, decimal extractionPercentage)
+        public bool CetsaMsRun(int sheetIndex, decimal extractionPercentage)
         {
             Debug.Assert(sheetIndex > 0);
 
@@ -118,11 +118,9 @@ namespace Duck.OfficeAutomationModule.Office
                 newWorksheet.Move(After: mWorkbook.Sheets[mWorkbook.Sheets.Count]);
 
                 // diff 열 계산
-                await extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
+                extractionMsValueInNewWorksheet(newWorksheet, experimentWorksheet,
                                                 sourceTableRange, sourceTableStartCell, sourceTableEndCell
                                                 , i, extractionPercentage);
-
-                Marshal.ReleaseComObject(newWorksheet);
             }
 
             #endregion
@@ -131,7 +129,7 @@ namespace Duck.OfficeAutomationModule.Office
             return isTableFound;
         }
 
-        private async Task extractionMsValueInNewWorksheet(
+        private void extractionMsValueInNewWorksheet(
             Excel.Worksheet newWorksheet, Excel.Worksheet experimentWorksheet, Excel.Range sourceTableRange, 
             Excel.Range sourceTableStartCell, Excel.Range sourceTableEndCell,
             int colNum, decimal extractionPercentage)
