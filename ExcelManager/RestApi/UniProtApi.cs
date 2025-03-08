@@ -13,7 +13,7 @@ namespace Duck.OfficeAutomationModule.RestApi
         static readonly string PROTEINS_URL = "https://www.ebi.ac.uk/proteins/api/proteins";
         static readonly string COORDINATES_URL = "https://www.ebi.ac.uk/proteins/api/coordinates";
 
-        private static readonly HttpClient _client = new HttpClient();
+        private static readonly HttpClient CLIENT = new HttpClient();
 
         public static async Task<string> GetProteinDataOrNullAsync(string accession)
         {
@@ -22,7 +22,7 @@ namespace Duck.OfficeAutomationModule.RestApi
             try
             {
                 string apiUrl = $"{PROTEINS_URL}?accession={accession}";
-                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+                HttpResponseMessage response = await CLIENT.GetAsync(apiUrl);
 
                 return await response.Content.ReadAsStringAsync();
             }
@@ -41,7 +41,7 @@ namespace Duck.OfficeAutomationModule.RestApi
             try
             {
                 string apiUrl = $"{COORDINATES_URL}?accession={accession}";
-                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+                HttpResponseMessage response = await CLIENT.GetAsync(apiUrl);
 
                 return await response.Content.ReadAsStringAsync();
             }
@@ -59,7 +59,7 @@ namespace Duck.OfficeAutomationModule.RestApi
             try
             {
                 string apiUrl = $"{PROTEINS_URL}?accession={accession}";
-                HttpResponseMessage response = await _client.GetAsync(apiUrl);
+                HttpResponseMessage response = await CLIENT.GetAsync(apiUrl);
 
                 return await response.Content.ReadAsStringAsync();
             }
